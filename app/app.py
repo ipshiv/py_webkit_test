@@ -62,5 +62,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     window.setWindowTitle("File uploader")
+    available_geometry = app.desktop().availableGeometry(window)
+    window.resize(available_geometry.width() * 2 / 3, available_geometry.height() * 2 / 3)
     window.show()
     sys.exit(app.exec_())
