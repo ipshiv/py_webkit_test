@@ -1,6 +1,6 @@
 const updateattribute = (value) =>
 {
-    document.getElementById("value").textContent = value;
+    document.getElementById("value").innerHTML = value;
 };
 
 
@@ -12,5 +12,5 @@ new QWebChannel(qt.webChannelTransport,
    server.new_list.connect((value) => {
     document.getElementById("value2").innerHTML= value;
    });
-   alert("Channel setted");
+   // alert("Channel setted");
   });
