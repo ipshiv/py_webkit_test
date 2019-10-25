@@ -12,9 +12,12 @@ from PySide2.QtWebEngine import *
 from PySide2.QtWebEngineWidgets import *
 from PySide2.QtWebChannel import *
 from config import GLOBAL_STATIC_FOLDER, GLOBAL_UPLOAD_FOLDER
+from processing.DataHandler import LocalDataHandler
 
-def get_all_files(path):
-    files = os.listdir(path)
+dataHandler = LocalDataHandler(GLOBAL_UPLOAD_FOLDER)
+
+def getFilesHTML(path):
+    files = dataHandler.listAllFiles(path)
     return_tag = "<ul><li>"
     return_tag += "</li><li>".join(files)
     return_tag += "</li></ul>"
@@ -46,16 +49,25 @@ class MainWindow(QMainWindow):
         self.addToolBar(self.mainToolBar)
         showBtn = QPushButton("Показать файлы", self)
         self.mainToolBar.addWidget(showBtn)
-        showBtn.clicked.connect(lambda: self.web.value_changed.emit(get_all_files(GLOBAL_UPLOAD_FOLDER)))
+        showBtn.clicked.connect(lambda: self.web.value_changed.emit(getFilesHTML(GLOBAL_UPLOAD_FOLDER)))
 
         uploadBtn = QPushButton("Загрузить файлы", self)
         self.mainToolBar.addWidget(uploadBtn)
-        uploadBtn.clicked.connect(lambda: self.web.new_list.emit("<ul><li>one</li><li>second</li></ul>"))
+        uploadBtn.clicked.connect(lambda: self.web.file_open())
 
 
 class WebClass(QObject):
     value_changed = Signal(str)
     new_list = Signal(str)
+
+    def file_open(self):
+        name = QFileDialog.getOpenFileName()
+        result = dataHandler.uploadFile(name[0])
+        if result:
+            self.value_changed.emit(getFilesHTML(GLOBAL_UPLOAD_FOLDER))
+            # print ("OK!")
+        else:
+            print ("Error: %s" % name[0])
 
 
 if __name__ == "__main__":

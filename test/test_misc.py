@@ -3,7 +3,7 @@
 import os
 import unittest
 
-from app.app import get_all_files
+from app.app import getFilesHTML
 from app.config import GLOBAL_STATIC_FOLDER, GLOBAL_UPLOAD_FOLDER
 
 
@@ -12,7 +12,7 @@ class TestGetFilesHandler(unittest.TestCase):
     def test_from_upload(self):
         test_result = "<ul><li>test.txt</li></ul>"
         path = GLOBAL_UPLOAD_FOLDER
-        result = get_all_files(path)
+        result = getFilesHTML(path)
         self.assertEqual(test_result, result)
 
 
